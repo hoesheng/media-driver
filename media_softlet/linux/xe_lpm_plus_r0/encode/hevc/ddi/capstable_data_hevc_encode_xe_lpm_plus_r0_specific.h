@@ -92,6 +92,31 @@ static ConfigDataList configDataList_VAProfileHEVCMain10_VAEntrypointEncSlice_Xe
   {VA_RC_VBR | VA_RC_MB, 0}
 };
 
+static ConfigDataList configDataList_VAProfileHEVCMain422_10_VAEntrypointEncSlice_Xe_Lpm_plus_r0 =
+{
+  {VA_RC_CQP, 0},
+  {VA_RC_CBR, 0},
+  {VA_RC_VBR, 0},
+  {VA_RC_CBR | VA_RC_MB, 0},
+  {VA_RC_VBR | VA_RC_MB, 0},
+  {VA_RC_ICQ, 0},
+  {VA_RC_VCM, 0},
+  {VA_RC_QVBR, 0},
+  {VA_RC_AVBR, 0},
+#if VA_CHECK_VERSION(1, 10, 0)
+  {VA_RC_TCBRC, 0},
+#endif
+  {VA_RC_CBR | VA_RC_PARALLEL | VA_RC_MB, 0},
+  {VA_RC_VBR | VA_RC_PARALLEL | VA_RC_MB, 0},
+  {VA_RC_ICQ | VA_RC_PARALLEL, 0},
+  {VA_RC_VCM | VA_RC_PARALLEL, 0},
+  {VA_RC_QVBR | VA_RC_PARALLEL, 0},
+  {VA_RC_AVBR  | VA_RC_PARALLEL, 0},
+#if VA_CHECK_VERSION(1, 10, 0)
+  {VA_RC_TCBRC | VA_RC_PARALLEL, 0},
+#endif
+};
+
 static ConfigDataList configDataList_VAProfileHEVCMain444_VAEntrypointEncSlice_Xe_Lpm_plus_r0 =
 {
   {VA_RC_CQP, 0},
@@ -249,6 +274,47 @@ static const AttribList attribList_VAProfileHEVCMain_VAEntrypointEncSlice_Xe_Lpm
 static const AttribList attribList_VAProfileHEVCMain10_VAEntrypointEncSlice_Xe_Lpm_plus_r0
 {
    {VAConfigAttribRTFormat, VA_RT_FORMAT_YUV420 | VA_RT_FORMAT_YUV420_10BPP | VA_RT_FORMAT_YUV444 | VA_RT_FORMAT_YUV444_10 | VA_RT_FORMAT_RGB32 | VA_RT_FORMAT_RGB32_10BPP},
+   {VAConfigAttribRateControl, VA_RC_CQP | VA_RC_CBR | VA_RC_VBR | VA_RC_QVBR | VA_RC_MB | VA_RC_VCM | VA_RC_TCBRC | VA_RC_ICQ},
+   {VAConfigAttribEncParallelRateControl, 0},
+   {VAConfigAttribEncPackedHeaders, VA_ENC_PACKED_HEADER_PICTURE | VA_ENC_PACKED_HEADER_SEQUENCE | VA_ENC_PACKED_HEADER_SLICE | VA_ENC_PACKED_HEADER_RAW_DATA | VA_ENC_PACKED_HEADER_MISC},
+   {VAConfigAttribEncInterlaced, 0},
+   {VAConfigAttribEncMaxRefFrames, DDI_CODEC_VDENC_MAX_L0_REF_FRAMES_LDB |(DDI_CODEC_VDENC_MAX_L1_REF_FRAMES_LDB << DDI_CODEC_LEFT_SHIFT_FOR_REFLIST1)},
+   {VAConfigAttribEncMaxSlices, ENCODE_HEVC_VDENC_NUM_MAX_SLICES},
+   // only for matching with legacy
+   {VAConfigAttribEncSliceStructure, VA_ENC_SLICE_STRUCTURE_POWER_OF_TWO_ROWS | VA_ENC_SLICE_STRUCTURE_EQUAL_ROWS | VA_ENC_SLICE_STRUCTURE_MAX_SLICE_SIZE | VA_ENC_SLICE_STRUCTURE_ARBITRARY_ROWS | VA_ENC_SLICE_STRUCTURE_EQUAL_MULTI_ROWS},
+   // Correct value
+   // {VAConfigAttribEncSliceStructure, VA_ENC_SLICE_STRUCTURE_EQUAL_ROWS | VA_ENC_SLICE_STRUCTURE_MAX_SLICE_SIZE},
+   {VAConfigAttribMaxPictureWidth, CODEC_16K_MAX_PIC_WIDTH},
+   {VAConfigAttribMaxPictureHeight, CODEC_12K_MAX_PIC_HEIGHT},
+   {VAConfigAttribEncQualityRange, NUM_TARGET_USAGE_MODES - 1},
+   {VAConfigAttribEncIntraRefresh, VA_ENC_INTRA_REFRESH_ROLLING_COLUMN | VA_ENC_INTRA_REFRESH_ROLLING_ROW},
+   {VAConfigAttribEncROI, HEVCCommon_VAEntrypointEncSlice_encROI.value},
+   {VAConfigAttribProcessingRate, VA_PROCESSING_RATE_ENCODE},
+   {VAConfigAttribEncDirtyRect, 16},
+   {VAConfigAttribEncTileSupport, 1},
+   // Correct values
+   // {VAConfigAttribPredictionDirection, VA_PREDICTION_DIRECTION_PREVIOUS | VA_PREDICTION_DIRECTION_FUTURE},
+   {VAConfigAttribContextPriority, 1024},
+   // The following items are only for matching with legacy.
+   {VAConfigAttribEncJPEG, ((JPEG_MAX_QUANT_TABLE << 14) | /* max_num_quantization_tables : 3 */
+                            (JPEG_MAX_NUM_HUFF_TABLE_INDEX << 11) | /* max_num_huffman_tables : 3 */
+                            (1 << 7) | /* max_num_scans : 4 */
+                            (jpegNumComponent << 4)) /* max_num_components : 3 */},
+   {VAConfigAttribEncQuantization, 0},
+   {VAConfigAttribEncSkipFrame, 0},
+   {VAConfigAttribFEIMVPredictors, 4},
+   {VAConfigAttribCustomRoundingControl, 1},
+   {VAConfigAttribMaxFrameSize, 3},
+   {VAConfigAttribPredictionDirection, 7},
+#if VA_CHECK_VERSION(1, 12, 0)
+   {VAConfigAttribEncHEVCFeatures, vaConfigAttribValEncHEVCFeatures.value},
+   {VAConfigAttribEncHEVCBlockSizes, vaConfigAttribValEncHEVCBlockSizes.value},
+#endif
+};
+
+static const AttribList attribList_VAProfileHEVCMain422_10_VAEntrypointEncSlice_Xe_Lpm_plus_r0
+{
+   {VAConfigAttribRTFormat, VA_RT_FORMAT_YUV420 | VA_RT_FORMAT_YUV420_10BPP | VA_RT_FORMAT_YUV444 | VA_RT_FORMAT_YUV444_10 | VA_RT_FORMAT_RGB32 | VA_RT_FORMAT_RGB32_10BPP | VA_RT_FORMAT_YUV422 | VA_RT_FORMAT_YUV422_10},
    {VAConfigAttribRateControl, VA_RC_CQP | VA_RC_CBR | VA_RC_VBR | VA_RC_QVBR | VA_RC_MB | VA_RC_VCM | VA_RC_TCBRC | VA_RC_ICQ},
    {VAConfigAttribEncParallelRateControl, 0},
    {VAConfigAttribEncPackedHeaders, VA_ENC_PACKED_HEADER_PICTURE | VA_ENC_PACKED_HEADER_SEQUENCE | VA_ENC_PACKED_HEADER_SLICE | VA_ENC_PACKED_HEADER_RAW_DATA | VA_ENC_PACKED_HEADER_MISC},
@@ -580,6 +646,24 @@ static ProfileSurfaceAttribInfo surfaceAttribInfo_VAProfileHEVCMain10_VAEntrypoi
     }}},
 };
 
+static ProfileSurfaceAttribInfo surfaceAttribInfo_VAProfileHEVCMain422_10_VAEntrypointEncSlice_Xe_Lpm_plus_r0 =
+{
+  {VASurfaceAttribPixelFormat, VA_SURFACE_ATTRIB_GETTABLE | VA_SURFACE_ATTRIB_SETTABLE, {VAGenericValueTypeInteger, {VA_FOURCC_YUY2}}},
+  {VASurfaceAttribPixelFormat, VA_SURFACE_ATTRIB_GETTABLE | VA_SURFACE_ATTRIB_SETTABLE, {VAGenericValueTypeInteger, {VA_FOURCC_Y210}}},
+  {VASurfaceAttribMaxWidth, VA_SURFACE_ATTRIB_GETTABLE, {VAGenericValueTypeInteger, {CODEC_16K_MAX_PIC_WIDTH}}},
+  {VASurfaceAttribMaxHeight, VA_SURFACE_ATTRIB_GETTABLE, {VAGenericValueTypeInteger, {CODEC_12K_MAX_PIC_HEIGHT}}},
+  {VASurfaceAttribMinWidth, VA_SURFACE_ATTRIB_GETTABLE, {VAGenericValueTypeInteger, {CODEC_128_MIN_PIC_WIDTH}}},
+  {VASurfaceAttribMinHeight, VA_SURFACE_ATTRIB_GETTABLE, {VAGenericValueTypeInteger, {CODEC_128_MIN_PIC_HEIGHT}}},
+  {VASurfaceAttribMemoryType,  VA_SURFACE_ATTRIB_GETTABLE | VA_SURFACE_ATTRIB_SETTABLE,
+    {VAGenericValueTypeInteger, {
+#if VA_CHECK_VERSION(1, 21, 0)
+        VA_SURFACE_ATTRIB_MEM_TYPE_DRM_PRIME_3 |
+#endif
+        VA_SURFACE_ATTRIB_MEM_TYPE_VA |
+        VA_SURFACE_ATTRIB_MEM_TYPE_DRM_PRIME_2
+    }}},
+};
+
 static ProfileSurfaceAttribInfo surfaceAttribInfo_VAProfileHEVCMain444_VAEntrypointEncSlice_Xe_Lpm_plus_r0 =
 {
   {VASurfaceAttribPixelFormat, VA_SURFACE_ATTRIB_GETTABLE | VA_SURFACE_ATTRIB_SETTABLE, {VAGenericValueTypeInteger, {VA_FOURCC_AYUV}}},
@@ -703,6 +787,13 @@ static const EntrypointData entrypointMap_VAProfileHEVCMain10_Data_Xe_Lpm_plus_r
     &attribList_VAProfileHEVCMain10_VAEntrypointEncSlice_Xe_Lpm_plus_r0,
     &configDataList_VAProfileHEVCMain10_VAEntrypointEncSlice_Xe_Lpm_plus_r0,
     &surfaceAttribInfo_VAProfileHEVCMain10_VAEntrypointEncSlice_Xe_Lpm_plus_r0,
+};
+
+static const EntrypointData entrypointMap_VAProfileHEVCMain422_10_Data_Xe_Lpm_plus_r0
+{
+    &attribList_VAProfileHEVCMain422_10_VAEntrypointEncSlice_Xe_Lpm_plus_r0,
+    &configDataList_VAProfileHEVCMain422_10_VAEntrypointEncSlice_Xe_Lpm_plus_r0,
+    &surfaceAttribInfo_VAProfileHEVCMain422_10_VAEntrypointEncSlice_Xe_Lpm_plus_r0,
 };
 
 static const EntrypointData entrypointMap_VAProfileHEVCMain444_Data_Xe_Lpm_plus_r0

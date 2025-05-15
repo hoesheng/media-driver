@@ -216,6 +216,10 @@ static const EntrypointMap entrypointMap_VAProfileHEVCMain12_Xe_Lpm_plus_r0
 
 static const EntrypointMap entrypointMap_VAProfileHEVCMain422_10_Xe_Lpm_plus_r0
 {
+#if defined(_HEVC_ENCODE_VDENC_SUPPORTED)
+    {VAEntrypointEncSlice, &entrypointMap_VAProfileHEVCMain422_10_Data_Xe_Lpm_plus_r0},
+#endif
+
 #if defined(_HEVC_DECODE_SUPPORTED)
     {VAEntrypointVLD, &entrypointMap_VAProfileHEVCMain422_10Dec_Data_Xe_Lpm_plus_r0},
 #endif
@@ -369,13 +373,13 @@ static const ProfileMap profileMap_Xe_Lpm_plus_r0
     {VAProfileHEVCSccMain, &entrypointMap_VAProfileHEVCSccMain_Xe_Lpm_plus_r0},
     {VAProfileHEVCMain444_10, &entrypointMap_VAProfileHEVCMain444_10_Xe_Lpm_plus_r0},
     {VAProfileHEVCMain444, &entrypointMap_VAProfileHEVCMain444_Xe_Lpm_plus_r0},
+    {VAProfileHEVCMain422_10, &entrypointMap_VAProfileHEVCMain422_10_Xe_Lpm_plus_r0},
     {VAProfileHEVCMain10, &entrypointMap_VAProfileHEVCMain10_Xe_Lpm_plus_r0},
     {VAProfileHEVCMain, &entrypointMap_VAProfileHEVCMain_Xe_Lpm_plus_r0},
 #endif
 
 #if defined(_HEVC_DECODE_SUPPORTED)
     {VAProfileHEVCMain12, &entrypointMap_VAProfileHEVCMain12_Xe_Lpm_plus_r0},
-    {VAProfileHEVCMain422_10, &entrypointMap_VAProfileHEVCMain422_10_Xe_Lpm_plus_r0},
     {VAProfileHEVCMain422_12, &entrypointMap_VAProfileHEVCMain422_12_Xe_Lpm_plus_r0},
     {VAProfileHEVCMain444_12, &entrypointMap_VAProfileHEVCMain444_12_Xe_Lpm_plus_r0},
 #endif
